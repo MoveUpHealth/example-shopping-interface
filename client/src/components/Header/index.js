@@ -12,6 +12,7 @@ const Header = () => {
     
 
     return (
+        <div className="nav-bar">
         <nav className="user-nav">
             <div className="search">
             <i class="fas fa-search"></i>
@@ -33,6 +34,34 @@ const Header = () => {
                 </div>
             </div>
         </nav>
+        <nav className="products">
+            <div className="department">
+                <p className="nav-item">
+                    Clothing
+                </p>
+            </div>
+            <div className="department">
+                <p className="nav-item">
+                    Furniture
+                </p>
+            </div>
+            <div className="department">
+                <p className="nav-item">
+                    Electronics
+                </p>
+            </div>
+            <div className="department">
+                <p className="nav-item">
+                    Sale
+                </p>
+            </div>
+            <div className="department">
+                <p className="nav-item">
+                    Clearance
+                </p>
+            </div>
+        </nav>
+        </div>
     )
 }
 
