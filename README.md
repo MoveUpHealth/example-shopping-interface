@@ -5,6 +5,10 @@ Authors: Christina Lee, Jessica Tax
 This is an example shopping interface using a MERN stack (MongoDB, Express, React, and Node.js). 
 Users will be able to add comments on products.
 
+Date: Aug 14, 2021
+Design Docs added -- Added some basic design docs for the front page wireframe and database.
+Design docs done in Dia (http://dia-installer.de/index.html.en).
+
 Date: Aug 12, 2021
 Initial Commit -- Added a basic server and default React client scripts.  To run for debugging purposes, install nodemon as follows:
 
