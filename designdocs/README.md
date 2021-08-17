@@ -129,11 +129,11 @@ Review
 	}
 	body: {
 		type: String,
-		required: [true, 'title field is required'],
+		required: [true, 'body field is required'],
 	}
 	stars: {
 		type: String,
-		required: [true, 'title field is required'],
+		required: [true, 'stars field is required'],
 		pattern: ^/[1-5]/
 	}
 }
@@ -171,7 +171,7 @@ backend so they don't have to enter them.
 
 The image path stores the path to the image on the server, which will be added to the img tags in the html coded in the React frontend.
 
-**security considerations**
+**security considerations**\
 The username is a field added entirely for display convenience and security reasons for the end-user.  Some reasons users may want a username:
 * provides a unique identifier of each user to anyone reading reviews, to allow them to uniquely identify users over multiple reviews to judge their individual credibility.
 This also prevents confusion by a user from seeing a review from someone with the same first and last name as them.  If a user wants their full name to be visible, they may 
@@ -198,17 +198,17 @@ https://www.mongodb.com/developer/quickstart/bson-data-types-decimal128/
 
 ### Matching Using Regex
 
-RegEx is short for regular extpression.  Regular expressions are available in many languages to match on a pattern, and have consistent rules across those languages regarding their use.
+RegEx is short for regular expression.  Regular expressions are available in many languages to match on a pattern, and have consistent rules across those languages regarding their use.
 I have used the pattern specifier should be used to specify the schema as shown in the documentation, but I have also seen regex and match used:
 
-**with pattern specifier:**
-https://docs.mongodb.com/manual/reference/operator/query/jsonSchema/
-https://docs.mongodb.com/realm/mongodb/enforce-a-document-schema/
+**with pattern specifier:**\
+https://docs.mongodb.com/manual/reference/operator/query/jsonSchema/\
+https://docs.mongodb.com/realm/mongodb/enforce-a-document-schema/\
 
-**with regex specifier:**
+**with regex specifier:**\
 https://docs.mongodb.com/manual/core/schema-validation/
 
-**with match specifier:**
+**with match specifier:**\
 https://stackoverflow.com/questions/66383516/add-mongoose-validation-for-phone-numbers
 
 The email regex pattern used comes from:
