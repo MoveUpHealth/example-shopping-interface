@@ -25,6 +25,23 @@ Description: Styling for Header component
     padding: 0 4%;
 }
 
+.nav-link {
+    color: darkgray;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+.nav-link:hover {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 0 0 #f5f5f5;
+}
+
+.active {
+    color: #000000;
+}
+
+
 .label {
     width: 200px;
     text-align: end;

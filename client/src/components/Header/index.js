@@ -9,28 +9,36 @@ import logo from "../../images/logo.png"
 import "./styles.css";
 
 const Header = () => {
-    
+    const activeLink = useLocation()
 
     return (
         <div className="nav-bar">
         <nav className="user-nav">
             <div className="search">
-            <i class="fas fa-search"></i>
+            <i className="fas fa-search"></i>
             <input type="text" className="search-bar" placeholder="Search..."/>
             </div>
             <div className="logo">
-                <img src={logo} alt="Shop Logo" height="80px" className="header-logo" />
+                <Link to={"/"}>
+                    <img src={logo} alt="Shop Logo" height="80px" className="header-logo" />
+                </Link>
             </div>
             <div className="account-nav">
                 <div className="profile">
-                    <p className="label">Sign In/Track Order</p>
-                    <i class="far fa-user"></i>
+                    <Link to={"/login"} className={activeLink.pathname === "/login" ? "nav-link active" : "nav-link"}>
+                        <p className="label">Sign In/Track Order</p>
+                        <i className="far fa-user"></i>
+                    </Link>
                 </div>
                 <div className="favorites">
-                    <i class="far fa-heart"></i>
+                    <Link to={"/favorites"} className={activeLink.pathname === "/favorites" ? "nav-link active" : "nav-link"}>
+                        <i className="far fa-heart"></i>
+                    </Link>
                 </div>
                 <div className="cart">
-                <i class="fas fa-shopping-cart"></i>
+                    <Link to={"/cart"} className={activeLink.pathname === "/cart" ? "nav-link active" : "nav-link"}>
+                        <i className="fas fa-shopping-cart"></i>
+                    </Link>
                 </div>
             </div>
         </nav>
