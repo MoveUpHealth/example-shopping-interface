@@ -7,6 +7,7 @@ well as reduce the frontend design needs.
 
 ## Schemas
 
+```
 User
 {
 	email: {
@@ -137,6 +138,7 @@ Review
 	}
 }
 
+```
 
 ### Justification for Data Validation
 
