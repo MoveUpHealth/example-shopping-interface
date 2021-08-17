@@ -1,11 +1,11 @@
-#Shopping Interface Design Decisions
+# Shopping Interface Design Decisions
 
 This shopping interface will be designed for US users only.  This will limit the possibilities we need to validate in the schema for address and phone number, as
 well as reduce the frontend design needs.
 
-#Shopping DB Collections
+# Shopping DB Collections
 
-##Schemas
+## Schemas
 
 User
 {
@@ -138,21 +138,21 @@ Review
 }
 
 
-###Justification for Data Validation
+### Justification for Data Validation
 
 Data validation takes time and thus should be justified in any NoSQL Database.  There are a number of reasons to validate fields in an application like a shopping interface that will require storing large amounts of data.  We
 wish to prevent data from being accidentally entered with missing fields that will prevent it from being found or displayed correctly.  We want to prevent accidental data entry of obviously invalid data (eg. forgetting an '@'
 symbol in an email).  From this standpoint, the necessity of data integrity for a commercial application far outweighs the convenience and speed of keeping all fields unspecified. For this reason, this shopping example will
 use a schema designed to validate all necessary fields.  
 
-###Balancing Avoiding Unnecessary Duplication of Data with Speed
+### Balancing Avoiding Unnecessary Duplication of Data with Speed
 
 The justification of using a NoSQL Database is its ability for its more flexible features to increase speed of data input and retrieval over SQL Databases.  However, unnecessary data duplication can negatively impact speed 
 by increading document size, which increases the time taken to retrieve the corresponding document.  It can also increase the possibility of introducing errors.  To this end, this schema balances these two needs by using a 
 list of review_ids nested inside each User and Product document. The id list speeds the retrieval of the data while preventing unnecessary data in the Review Collection, such as the body of the review, from being duplicated 
 in the User and Product collections.
 
-###ID Retrieval Patterns
+### ID Retrieval Patterns
 
 Since will be retrieving the reviews only after looking at a customer or product id, we technically do not need to store those in the review itself.  However, when retrireving a Review, we will need to retrieve both the review 
 information and the information of the other document type.  For example, if we retrieve a review for a customer, we will also need to retrieve its corresponding product, and if we retrieve a review for a product, we will also 
@@ -187,12 +187,12 @@ The following information is considered sensitive for the user and we should avo
 The most sensitive information here is the password, as obtaining it allows a malicious party to acces their account and impersonate the user, as well as obtain sensitive information regarding the user.
 However, the other information is still sensitive and should not be displayed publicly.  We should do tests to check whether malicious attacks can expose any of this information.
 
-###Data Type References
+### Data Type References
 
 https://docs.mongodb.com/realm/mongodb/document-schemas/
 https://www.mongodb.com/developer/quickstart/bson-data-types-decimal128/
 
-###matching using regex
+### Matching Using Regex
 
 RegEx is short for regular extpression.  Regular expressions are available in many languages to match on a pattern, and have consistent rules across those languages regarding their use.
 I have used the pattern specifier should be used to specify the schema as shown in the documentation, but I have also seen regex and match used:
@@ -210,7 +210,7 @@ https://stackoverflow.com/questions/66383516/add-mongoose-validation-for-phone-n
 The email regex pattern used comes from:
 https://regexlib.com/Search.aspx?k=email&AspxAutoDetectCookieSupport=1
 
-###Testing
+### Testing
 
 Testing should use easily produced datasets (small or acquired from a public dataset).  This is in case testing uncovers a need to change the Database schema.  If the database schema is changed, it may invalidate the test set
 and require the production of another test set. 
