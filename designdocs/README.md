@@ -14,15 +14,12 @@ The core of the schema describes the documents User, Product, and Review.  The P
 
 ```
 ProductInCart{ 
-	
-	properties: {
-		product_id: {
-			type: Number
-		}
-		amt: {
-			type: Number		
-		}						
+	product_id: {
+		type: Number
 	}
+	amt: {
+		type: Number		
+	}						
 }
 
 User
@@ -224,11 +221,11 @@ number of items bought of that type.
 
 ### Data Type References
 
-https://docs.mongodb.com/realm/mongodb/document-schemas/\
+https://docs.mongodb.com/realm/mongodb/document-schemas/ 
 
-https://www.mongodb.com/developer/quickstart/bson-data-types-decimal128/\
+https://www.mongodb.com/developer/quickstart/bson-data-types-decimal128/
 
-https://mongoosejs.com/docs/schematypes.html#arrays\
+https://mongoosejs.com/docs/schematypes.html#arrays
 
 ### Matching Using Regex
 
@@ -236,17 +233,18 @@ RegEx is short for regular expression.  Regular expressions are available in man
 I have used the pattern specifier should be used to specify the schema as shown in the documentation, but I have also seen regex and match used:
 
 **with pattern specifier:**\
-https://docs.mongodb.com/manual/reference/operator/query/jsonSchema/\
-https://docs.mongodb.com/realm/mongodb/enforce-a-document-schema/\
+https://docs.mongodb.com/manual/reference/operator/query/jsonSchema/
+
+https://docs.mongodb.com/realm/mongodb/enforce-a-document-schema/
 
 **with regex specifier:**\
-https://docs.mongodb.com/manual/core/schema-validation/\
+https://docs.mongodb.com/manual/core/schema-validation/
 
 **with match specifier:**\
-https://stackoverflow.com/questions/66383516/add-mongoose-validation-for-phone-numbers\
+https://stackoverflow.com/questions/66383516/add-mongoose-validation-for-phone-numbers
 
 The email regex pattern used comes from:\
-https://regexlib.com/Search.aspx?k=email&AspxAutoDetectCookieSupport=1\
+https://regexlib.com/Search.aspx?k=email&AspxAutoDetectCookieSupport=1
 
 ### Testing
 
