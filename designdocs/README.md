@@ -7,7 +7,24 @@ well as reduce the frontend design needs.
 
 ## Schemas
 
+The core of the schema describe the documents User, Product, and Review.  The ProductInCart schema is used in a subdocument array in the shopping cart:
+
+![The documents User, Product, and Review with associated fields](basicDBPlan.png "The Basic Schema Plan")
+
+
 ```
+ProductInCart{ 
+	
+	properties: {
+		product_id: {
+			type: Number
+		}
+		amt: {
+			type: Number		
+		}						
+	}
+}
+
 User
 {
 	email: {
@@ -63,12 +80,15 @@ User
 		}
 	}
 	phone: {
-		type: String
+		type: String,
 		pattern: ^\d{3}-\d{3}-\d{4}$
 	}
 	password: {
 		type: String,
-		required: [true, 'password field is required'],
+		required: [true, 'password field is required']
+	}
+	shopping_cart: {
+		type: [ProductInCart]		
 	}
 	review_ids: {
 		type: [Number],
@@ -95,11 +115,19 @@ Product
 		type: Decimal128,
 		required: [true, 'price field is required'],
 	}
+	tax: {
+		type: Decimal128,
+		required: [true, 'price field is required'],
+	}
 	review_ids: { 
 		type: [Number]
 	}
 	imagePath: {
-		type: String
+		type: String,
+		required: [true, 'image field is required']
+	}
+	thumbnailPath: {
+		type: String,
 		required: [true, 'image field is required']
 	}
 }
@@ -159,7 +187,7 @@ in the User and Product collections.
 Since will be retrieving the reviews only after looking at a customer or product id, we technically do not need to store those in the review itself.  However, when retrireving a Review document, we will need to retrieve 
 both the review information and the information of the other document type.  For example, if we retrieve a review for a customer, we will also need to retrieve its corresponding product, and if we retrieve a review for a product, 
 we will also need to retrieve information about its corresponding customer.  To resolve this without needing the review items themselves to have the extra ids, we could store the corresponding review\_id's and product\_id's together 
-in the User document, and the corresponding review\_id's and usernames in the Product document.  However, since doing this could nearly double the size of Users and Prodct documents with many associated reviews with little to 
+in the User document, and the corresponding review\_id's and usernames in the Product document.  However, since doing this could nearly double the size of Users and Product documents with many associated reviews with little to 
 no increase in retrieval speed, I do not believe this to be a good design choice.  Therefore I have instead placed both the associated product_id and username in the Review schema itself to avoid the space costs of the 
 alternative design choice.
 
@@ -191,10 +219,16 @@ The following information is considered sensitive for the user and we should avo
 The most sensitive information here is the password, as obtaining it allows a malicious party to acces their account and impersonate the user, as well as obtain sensitive information regarding the user.
 However, the other information is still sensitive and should not be displayed publicly.  We should do tests to check whether malicious attacks can expose any of this information.
 
+The shopping cart inside the User uses an array of the subdocument declared earlier called ProductInCart.  Product in cart has a product_id corresponding to the name of a product, and an amt corresponding to the
+number of items bought of that type. 
+
 ### Data Type References
 
-https://docs.mongodb.com/realm/mongodb/document-schemas/
-https://www.mongodb.com/developer/quickstart/bson-data-types-decimal128/
+https://docs.mongodb.com/realm/mongodb/document-schemas/\
+
+https://www.mongodb.com/developer/quickstart/bson-data-types-decimal128/\
+
+https://mongoosejs.com/docs/schematypes.html#arrays\
 
 ### Matching Using Regex
 
@@ -206,13 +240,13 @@ https://docs.mongodb.com/manual/reference/operator/query/jsonSchema/\
 https://docs.mongodb.com/realm/mongodb/enforce-a-document-schema/\
 
 **with regex specifier:**\
-https://docs.mongodb.com/manual/core/schema-validation/
+https://docs.mongodb.com/manual/core/schema-validation/\
 
 **with match specifier:**\
-https://stackoverflow.com/questions/66383516/add-mongoose-validation-for-phone-numbers
+https://stackoverflow.com/questions/66383516/add-mongoose-validation-for-phone-numbers\
 
-The email regex pattern used comes from:
-https://regexlib.com/Search.aspx?k=email&AspxAutoDetectCookieSupport=1
+The email regex pattern used comes from:\
+https://regexlib.com/Search.aspx?k=email&AspxAutoDetectCookieSupport=1\
 
 ### Testing
 
