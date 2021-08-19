@@ -7,7 +7,7 @@ well as reduce the frontend design needs.
 
 ## Schemas
 
-The core of the schema describe the documents User, Product, and Review.  The ProductInCart schema is used in a subdocument array in the shopping cart:
+The core of the schema describes the documents User, Product, and Review.  The ProductInCart schema is used in a subdocument array in the shopping cart:
 
 ![The documents User, Product, and Review with associated fields](basicDBPlan.png "The Basic Schema Plan")
 
