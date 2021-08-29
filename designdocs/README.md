@@ -252,7 +252,6 @@ Testing should use easily produced datasets (small or acquired from a public dat
 and require the production of another test set. 
 
 **Automated Testing**\
-
 Automated tests will make testing code faster in the long run, so automated tests will be designed for both the frontend and backend.  For the frontend (client) side, the [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) 
 and [Selenium](https://www.selenium.dev/) will be used.  The React Testing library is added with the default install of a React application.   Selenium is not added by default but must be installed via npm,
 and any browser drivers for browsers to be tested must be added as well.  To install selenium and the browser drivers for chrome and firefox, use the following command:
@@ -266,6 +265,5 @@ expected information.
 For backend tests, the [Mocha](https://github.com/mochajs/mocha) test framework will be used.
 
 **Manual Testing**\
-
 Manual testing will be used in the initial phases before automated tests are set up, and to supplement the automated tests for situations that are difficult to test in an automated way.  Testing the backend manually 
 can be done with [Postman](https://www.postman.com/) or [Insomnia](https://insomnia.rest/).
