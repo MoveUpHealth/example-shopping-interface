@@ -1,0 +1,32 @@
+/* 
+Author: Jessica Tax;
+Date: August 30, 2021
+
+Description: Stylesheet for all pages
+*/
+
+.login {
+    padding: 2% 2%;
+}
+
+.login-form {
+    display: flex;
+    width: 550px;
+    margin: 0 auto;
+}
+
+.login-field {
+    width: 550px;
+    margin: 0 auto;
+}
+
+label, input {
+    display: block;
+    width: 90%;
+    margin: 2% auto;
+    padding: 2% 2%;
+}
+
+.submit-btn {
+    width: 95%;
+}

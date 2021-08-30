@@ -70,6 +70,10 @@ User
 		type: String,
 		required: [true, 'password field is required'],
 	}
+	createdDate: {
+        type: Date,
+        default: Date.now,
+    },
 	review_ids: {
 		type: [Number],
 	}
@@ -129,11 +133,11 @@ Review
 	}
 	body: {
 		type: String,
-		required: [true, 'title field is required'],
+		required: [true, 'body field is required'],
 	}
 	stars: {
 		type: String,
-		required: [true, 'title field is required'],
+		required: [true, 'star field is required'],
 		pattern: ^/[1-5]/
 	}
 }
@@ -150,13 +154,13 @@ use a schema designed to validate all necessary fields.
 ### Balancing Avoiding Unnecessary Duplication of Data with Speed
 
 The justification of using a NoSQL Database is its ability for its more flexible features to increase speed of data input and retrieval over SQL Databases.  However, unnecessary data duplication can negatively impact speed 
-by increading document size, which increases the time taken to retrieve the corresponding document.  It can also increase the possibility of introducing errors.  To this end, this schema balances these two needs by using a 
+by increasing document size, which increases the time taken to retrieve the corresponding document.  It can also increase the possibility of introducing errors.  To this end, this schema balances these two needs by using a 
 list of review_ids nested inside each User and Product document. The id list speeds the retrieval of the data while preventing unnecessary data in the Review Collection, such as the body of the review, from being duplicated 
 in the User and Product collections.
 
 ### ID Retrieval Patterns
 
-Since will be retrieving the reviews only after looking at a customer or product id, we technically do not need to store those in the review itself.  However, when retrireving a Review document, we will need to retrieve 
+Since we will be retrieving the reviews only after looking at a customer or product id, we technically do not need to store those in the review itself.  However, when retrireving a Review document, we will need to retrieve 
 both the review information and the information of the other document type.  For example, if we retrieve a review for a customer, we will also need to retrieve its corresponding product, and if we retrieve a review for a product, 
 we will also need to retrieve information about its corresponding customer.  To resolve this without needing the review items themselves to have the extra ids, we could store the corresponding review\_id's and product\_id's together 
 in the User document, and the corresponding review\_id's and usernames in the Product document.  However, since doing this could nearly double the size of Users and Prodct documents with many associated reviews with little to 
