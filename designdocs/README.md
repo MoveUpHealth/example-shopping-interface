@@ -7,7 +7,21 @@ well as reduce the frontend design needs.
 
 ## Schemas
 
+The core of the schema describes the documents User, Product, and Review.  The ProductInCart schema is used in a subdocument array in the shopping cart:
+
+![The documents User, Product, and Review with associated fields](basicDBPlan.png "The Basic Schema Plan")
+
+
 ```
+ProductInCart{ 
+	product_id: {
+		type: Number
+	}
+	amt: {
+		type: Number		
+	}						
+}
+
 User
 {
 	email: {
@@ -63,12 +77,15 @@ User
 		}
 	}
 	phone: {
-		type: String
+		type: String,
 		pattern: ^\d{3}-\d{3}-\d{4}$
 	}
 	password: {
 		type: String,
-		required: [true, 'password field is required'],
+		required: [true, 'password field is required']
+	}
+	shopping_cart: {
+		type: [ProductInCart]		
 	}
 	createdDate: {
         type: Date,
@@ -99,11 +116,19 @@ Product
 		type: Decimal128,
 		required: [true, 'price field is required'],
 	}
+	tax: {
+		type: Decimal128,
+		required: [true, 'price field is required'],
+	}
 	review_ids: { 
 		type: [Number]
 	}
 	imagePath: {
-		type: String
+		type: String,
+		required: [true, 'image field is required']
+	}
+	thumbnailPath: {
+		type: String,
 		required: [true, 'image field is required']
 	}
 }
@@ -137,7 +162,7 @@ Review
 	}
 	stars: {
 		type: String,
-		required: [true, 'star field is required'],
+		required: [true, 'stars field is required'],
 		pattern: ^/[1-5]/
 	}
 }
@@ -163,7 +188,7 @@ in the User and Product collections.
 Since we will be retrieving the reviews only after looking at a customer or product id, we technically do not need to store those in the review itself.  However, when retrireving a Review document, we will need to retrieve 
 both the review information and the information of the other document type.  For example, if we retrieve a review for a customer, we will also need to retrieve its corresponding product, and if we retrieve a review for a product, 
 we will also need to retrieve information about its corresponding customer.  To resolve this without needing the review items themselves to have the extra ids, we could store the corresponding review\_id's and product\_id's together 
-in the User document, and the corresponding review\_id's and usernames in the Product document.  However, since doing this could nearly double the size of Users and Prodct documents with many associated reviews with little to 
+in the User document, and the corresponding review\_id's and usernames in the Product document.  However, since doing this could nearly double the size of Users and Product documents with many associated reviews with little to 
 no increase in retrieval speed, I do not believe this to be a good design choice.  Therefore I have instead placed both the associated product_id and username in the Review schema itself to avoid the space costs of the 
 alternative design choice.
 
@@ -175,7 +200,7 @@ backend so they don't have to enter them.
 
 The image path stores the path to the image on the server, which will be added to the img tags in the html coded in the React frontend.
 
-**security considerations**
+**security considerations**\
 The username is a field added entirely for display convenience and security reasons for the end-user.  Some reasons users may want a username:
 * provides a unique identifier of each user to anyone reading reviews, to allow them to uniquely identify users over multiple reviews to judge their individual credibility.
 This also prevents confusion by a user from seeing a review from someone with the same first and last name as them.  If a user wants their full name to be visible, they may 
@@ -195,30 +220,54 @@ The following information is considered sensitive for the user and we should avo
 The most sensitive information here is the password, as obtaining it allows a malicious party to acces their account and impersonate the user, as well as obtain sensitive information regarding the user.
 However, the other information is still sensitive and should not be displayed publicly.  We should do tests to check whether malicious attacks can expose any of this information.
 
+The shopping cart inside the User uses an array of the subdocument declared earlier called ProductInCart.  Product in cart has a product_id corresponding to the name of a product, and an amt corresponding to the
+number of items bought of that type. 
+
 ### Data Type References
 
-https://docs.mongodb.com/realm/mongodb/document-schemas/
+https://docs.mongodb.com/realm/mongodb/document-schemas/ 
+
 https://www.mongodb.com/developer/quickstart/bson-data-types-decimal128/
+
+https://mongoosejs.com/docs/schematypes.html#arrays
 
 ### Matching Using Regex
 
-RegEx is short for regular extpression.  Regular expressions are available in many languages to match on a pattern, and have consistent rules across those languages regarding their use.
+RegEx is short for regular expression.  Regular expressions are available in many languages to match on a pattern, and have consistent rules across those languages regarding their use.
 I have used the pattern specifier should be used to specify the schema as shown in the documentation, but I have also seen regex and match used:
 
-**with pattern specifier:**
+**with pattern specifier:**\
 https://docs.mongodb.com/manual/reference/operator/query/jsonSchema/
+
 https://docs.mongodb.com/realm/mongodb/enforce-a-document-schema/
 
-**with regex specifier:**
+**with regex specifier:**\
 https://docs.mongodb.com/manual/core/schema-validation/
 
-**with match specifier:**
+**with match specifier:**\
 https://stackoverflow.com/questions/66383516/add-mongoose-validation-for-phone-numbers
 
-The email regex pattern used comes from:
+The email regex pattern used comes from:\
 https://regexlib.com/Search.aspx?k=email&AspxAutoDetectCookieSupport=1
 
 ### Testing
 
 Testing should use easily produced datasets (small or acquired from a public dataset).  This is in case testing uncovers a need to change the Database schema.  If the database schema is changed, it may invalidate the test set
 and require the production of another test set. 
+
+**Automated Testing**\
+Automated tests will make testing code faster in the long run, so automated tests will be designed for both the frontend and backend.  For the frontend (client) side, the [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) 
+and [Selenium](https://www.selenium.dev/) will be used.  The React Testing library is added with the default install of a React application.   Selenium is not added by default but must be installed via npm,
+and any browser drivers for browsers to be tested must be added as well.  To install selenium and the browser drivers for chrome and firefox, use the following command:
+
+```
+npm install --save selenium-webdriver chromedriver geckodriver
+```
+The frontend will be tested by the automated tests by reading the contents of the page, entering in test data into text boxes, pressing buttons, and reading the page output to make sure it gives the 
+expected information.
+
+For backend tests, the [Mocha](https://github.com/mochajs/mocha) test framework will be used.
+
+**Manual Testing**\
+Manual testing will be used in the initial phases before automated tests are set up, and to supplement the automated tests for situations that are difficult to test in an automated way.  Testing the backend manually 
+can be done with [Postman](https://www.postman.com/) or [Insomnia](https://insomnia.rest/).
