@@ -57,22 +57,18 @@ User
 			}
 			street_address {
 				type: String,
-				required: [true, 'street address field is required'],
 				minLength: 5,
 				maxLength: 150
 			}
 			apt_number {
-				type: String,
-				required: [true, 'apartment number field is required'],
+				type: String
 			}
 			city {
 				type: String,
-				required: [true, 'city field is required'],
 				maxLength: 50
 			}
 			state: {
-				type: String,
-				required: [true, 'apartment number field is required'],
+				type: String
 			}
 		}
 	}
@@ -89,6 +85,10 @@ User
 	}
 	review_ids: {
 		type: [Number],
+	}
+	createdDate: {
+		type: Date,
+		default: Date.now
 	}
 }
 
