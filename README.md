@@ -5,6 +5,8 @@ Authors: Christina Lee, Jessica Tax
 This is an example shopping interface using a MERN stack (MongoDB, Express, React, and Node.js). 
 Users will be able to add comments on products.
 
+Design documents are now done in markdown files with diagrams done in the [draw.io app](https://app.diagrams.net/) or with [Moqups](https://moqups.com).
+
 Date: Aug 14, 2021
 Design Docs added -- Added some basic design docs for the front page wireframe and database.
 Design docs done in Dia (http://dia-installer.de/index.html.en).
