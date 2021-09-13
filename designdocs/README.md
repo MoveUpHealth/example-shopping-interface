@@ -264,6 +264,43 @@ expected information.
 
 For backend tests, the [Mocha](https://github.com/mochajs/mocha) test framework will be used.
 
+**React Testing Library Automated Tests**\
+1. Check for page logo on landing page
+2. Click the Sign In/Track Order link and check for correct page title
+3. Click the Favorites link and check for the correct page title
+4. Click the cart link and check for correct page title
+
+**Selenium Automated Tests**\
+1. Try to login with an invalid username and password - check for 'that username/password combination does not exist'
+2. Try to login with an invalid email (with @ symbol) and password - check for 'that username/password combination does not exist'
+3. Try to sign up with invalid email (no @ symbol) - check for @ error message
+4. Try to sign up with valid email-check for confirmation
+5. Try to login with a valid username and password - check for the user page title
+6. At the sign-up page, sign a user up with valid info.  Check details of user page to make sure that all details match with details entered in at signup.
+
 **Manual Testing**\
 Manual testing will be used in the initial phases before automated tests are set up, and to supplement the automated tests for situations that are difficult to test in an automated way.  Testing the backend manually 
-can be done with [Postman](https://www.postman.com/) or [Insomnia](https://insomnia.rest/).
+can be done with [Postman](https://www.postman.com/) or [Insomnia](https://insomnia.rest/).  The tests will check not only that the test returns the expected pass or fail state, but that it returns a useful and unique message. This is intended to help make the frontend easier to debug and to use the messages from the database when appropriate to give the user useful feedback on what the error is, and to make database errors easier to debug.  
+
+Messages should also be tested for security concerns to check that they do not leak sensitive information, either from users or about the website or company as a whole.
+
+**Insomnia or Postman Tests**
+1. Create a valid user with all valid required information
+2. Create a valid user including all valid optional information
+3. Create an invalid user missing a username
+4. Create an invalid missing an email
+5. Create an invalid user missing a first name
+6. Create an invalid user missing a last name
+7. Create an invalid user missing a password
+8. Create a user with various invalid emails that use incorrect format
+9. Create a user with an invalid username less than 5 characters
+10. Create a user with an invalid username greater than 35 characters
+11. Create a user with an invalid first name less than 2 characters
+12. Create a user with an invalid first name greater than 40 characters
+13. Create a user with an invalid last name less than 2 characters
+14. Create a user with an invalid first name greater than 40 characters
+15. Create a user with an invalid company name greater than 100 characters
+16. Create a user with an invalid street address of less than 5 characters
+17. Create a user with an invalid street address of greater than 150 characters
+18. Create a user with an invalid city name of greater than 50 characters
+19. Create a user with an invalid phone number 
