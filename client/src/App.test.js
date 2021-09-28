@@ -42,7 +42,7 @@ test('Click the Favorites link and check for the correct page title', () => {
     //expect(txt.innerHTML).toEqual('This is the favorites page!');
     //expected title	
     const txt = screen.getByText('Favorites');
-    expect(txt.innerHTML).toEqual('Favorites!');
+    expect(txt.innerHTML).toEqual('Favorites');
 
 });
 
