@@ -26,6 +26,10 @@ connection.once('open', () => {
   console.log("MongoDB connection attempt successful");
 })
 
+//added by JT on August 30th 2021
+//route for signup
+require("./routes/authRoutes")(app);
+
 //listen on the server
 app.listen(port, () => {
     console.log("Server is running on port " + port);

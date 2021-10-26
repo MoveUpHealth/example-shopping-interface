@@ -24,5 +24,6 @@ The following npm packages were installed:
 + dotenv@10.0.0
 + express@4.17.1
 + mongoose@5.13.7
++ bcrypt@5.0.1
 
 
