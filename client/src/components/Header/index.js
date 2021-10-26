@@ -31,12 +31,12 @@ const Header = () => {
                     </Link>
                 </div>
                 <div className="favorites">
-                    <Link to={"/favorites"} className={activeLink.pathname === "/favorites" ? "nav-link active" : "nav-link"}>
+                    <Link to={"/favorites"} className={activeLink.pathname === "/favorites" ? "nav-link active" : "nav-link"} aria-label="Favorites">
                         <i className="far fa-heart"></i>
                     </Link>
                 </div>
                 <div className="cart">
-                    <Link to={"/cart"} className={activeLink.pathname === "/cart" ? "nav-link active" : "nav-link"}>
+                    <Link to={"/cart"} className={activeLink.pathname === "/cart" ? "nav-link active" : "nav-link"} aria-label="Shopping Cart">
                         <i className="fas fa-shopping-cart"></i>
                     </Link>
                 </div>
