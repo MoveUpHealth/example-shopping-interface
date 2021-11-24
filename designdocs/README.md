@@ -250,7 +250,57 @@ https://stackoverflow.com/questions/66383516/add-mongoose-validation-for-phone-n
 The email regex pattern used comes from:\
 https://regexlib.com/Search.aspx?k=email&AspxAutoDetectCookieSupport=1
 
-### Testing
+# Backend JS Design
+
+The backend needs to send the information obtained from the react frontend to the database.
+
+## Security
+
+### Password Hashing 
+
+Password hashing should be performed on the server side to prevent the server from storing plaintext passwords.  This way, if the passwords file on the server is stolen, it cannot be used to authenticate since the hash cannot be entered on the client side to authenticate.  The server side will hash it again and compare it to the hash, which will fail.  This is a standard security system that is very robust.  The security of this system depends on: attacker not being able to change server software, https, and a secure hash algorithm using an off-the-shelf security library.  
+
+The server requirement is why this is done on the server side and not the client side.  The client side is very easy for an attacker to change the code for since it is run on their own computer, but the attacker typically does not have the ability to change the code executing on the server computer systems. 
+
+### Displaying Password
+
+Displaying the password in a url is acceptable in the early stages of development for testing purposes, but this should not be removed once the signin implementation is completed. 
+
+# Frontend Design
+
+## Mockups
+
+The following page mockups were designed on Moqups.com:
+
+![Landing Page](LandingPage.png "The Landing Page")
+
+![Product Page](ProductPage.png "The Product Page")
+
+![Cart Page](CartPage.png "The Cart Page")
+
+The frontend needs to perform the following functions at minimum:
+* allow a user to sign up
+* allow a user to sign in
+* allow a user to see a product description
+* allow a user to write a review of a product
+* allow a user to add a product to the shopping cart
+
+The frontend needs the following pages:
+* landing page
+* product page
+* shopping cart page
+* sign up page
+* sign up success page
+* login page
+
+## Code Design
+
+The frontend will be designed using React, a popular Node.js library for frontends.
+
+There are many possible approaches in code design in Node.js, as it uses the JavaScript language.  We can stick to a more procedural approach or make it look a little more object oriented.  Either way, the important thing is that the design be consistent throughout. 
+
+
+# Testing
 
 Testing should use easily produced datasets (small or acquired from a public dataset).  This is in case testing uncovers a need to change the Database schema.  If the database schema is changed, it may invalidate the test set
 and require the production of another test set. 
