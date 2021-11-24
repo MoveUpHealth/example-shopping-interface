@@ -252,7 +252,34 @@ https://regexlib.com/Search.aspx?k=email&AspxAutoDetectCookieSupport=1
 
 # Backend JS Design
 
-The backend needs to send the information obtained from the react frontend to the database.
+The backend needs to send the information obtained from the react frontend to the database.  The Mongoose library is used to communicate with the database, while the Express library is used by the backend for the HTTP protocol commands such as GET, POST, and DELETE in order to communicate between the backend server and the frontend client.  The Express library is used to listen for and respond to these commands on the server. 
+
+## API
+
+The server listens for HTTP commands such as POST, GET, and DELETE to specific routes.  These commands are received with request data sent by the client Once these commands are received, it can perform a database action, log error messages, and populate a resource to be returned to the client.
+
+```
+api/auth/signup POST: adds a new User to the database
+
+api/auth/login GET: retrieves one User from the database 
+
+```
+
+
+## Files
+The server/routes folder will contain the files for the Express HTTP protocol commands.  These files should be imported into server/server.js with a require.  The setup of the database tables helps to guide the file organization.
+
+```
+in server/routes:
+
+user.js - includes user as well as shopping cart collection GET and POST commands (since shopping cart is part of user)
+review.js - includes  review GET, POST, and DELETE commands
+product.js - includes product GET command
+
+
+```
+
+
 
 ## Security
 
@@ -267,6 +294,8 @@ The server requirement is why this is done on the server side and not the client
 Displaying the password in a url is acceptable in the early stages of development for testing purposes, but this should not be removed once the signin implementation is completed. 
 
 # Frontend Design
+
+The frontend will use the React library to render the webpages.  It will use the Axios library to send HTTP requests such as GET, POST, and DELETE to the corresponding routes and commands set up on the backend.
 
 ## Mockups
 
