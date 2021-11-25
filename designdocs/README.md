@@ -254,14 +254,21 @@ https://regexlib.com/Search.aspx?k=email&AspxAutoDetectCookieSupport=1
 
 The backend needs to send the information obtained from the react frontend to the database.  The Mongoose library is used to communicate with the database, while the Express library is used by the backend for the HTTP protocol commands such as GET, POST, and DELETE in order to communicate between the backend server and the frontend client.  The Express library is used to listen for and respond to these commands on the server. 
 
-## API
+## Express API
 
 The server listens for HTTP commands such as POST, GET, and DELETE to specific routes.  These commands are received with request data sent by the client Once these commands are received, it can perform a database action, log error messages, and populate a resource to be returned to the client.
 
 ```
 api/auth/signup POST: adds a new User to the database
 
-api/auth/login GET: retrieves one User from the database 
+api/auth/login GET: retrieves one User from the database
+
+api/product GET: retrieves one Product to be displayed by axios  display on a product page.  This includes the Review item list  associated with that Product.  Then must retrieve each Review document from Database by querying all the ids in the list (TODO: look into refactoring DB design to use a subdocument list instead of ID list as is done with the shopping cart so this doesn't have to be done.  This would mean that slightly more time is required when adding a review as it needs to be added as a subdocument to both User and Product, but less time when retrieving one to be viewed.  However, this would also mean that when just getting product information without getting reviews you have to get all of review data. The solution may be to keep the current User and Product schema with just the IDs and make copies of them that have the Review subdocument.  then the Product or User collection with just the id list has another field like UserWithFullReviews or ProductWithFullReviews that is a copy of User or Product respectively but with a subdocument list instead of id list. Then if you don't need the Reviews you can query the User or Product without them, but if you do need them, you can Query the User or Product with them.  This also means we can drop the id lists entirely as they will never be used). 
+
+api/landingProducts GET: retrieves the list of 3 items from the  Product collection to display on the landing page based on number of five star reviews
+
+api/similarProducts GET: retrieves a list of 3 items from the Product collection based on a category field
+ 
 
 ```
 
