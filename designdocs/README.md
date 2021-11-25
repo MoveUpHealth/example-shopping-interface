@@ -263,24 +263,20 @@ api/auth/signup POST: adds a new User to the database
 
 api/auth/login GET: retrieves one User from the database
 
-api/product GET: retrieves one Product to be displayed by axios  display on a
-product page.  This includes the Review item list  associated with that
-Product.  Then must retrieve each Review document from Database by querying
-all the ids in the list (TODO: look into refactoring DB design to use a
-subdocument list instead of ID list as is done with the shopping cart so this
-doesn't have to be done.  This would mean that slightly more time is required
-when adding a review as it needs to be added as a subdocument to both User and
-Product, but less time when retrieving one to be viewed.  However, this would
-also mean that when just getting product information without getting reviews
-you have to get all of review data. The solution may be to keep the current
-User and Product schema with just the IDs and make copies of them that have
-the Review subdocument.  then the Product or User collection with just the id
-list has another field like UserWithFullReviews or ProductWithFullReviews that
-is a copy of User or Product respectively but with a subdocument list instead
-of id list. Then if you don't need the Reviews you can query the User or
-Product without them, but if you do need them, you can Query the User or
-Product with them.  This also means we can drop the id lists entirely as they
-will never be used). 
+api/product GET: retrieves one Product to be displayed by axios on its respective product page. This
+includes the Review item list associated with that Product. Then must retrieve each Review document
+from Database by querying all the ids in the list (TODO: look into refactoring DB design to use a
+subdocument list instead of ID list as is done with the shopping cart so this doesn't have to be
+done.  This would mean that slightly more time is required when adding a review as it needs to be
+added as a subdocument to both User and Product, but less time when retrieving one to be viewed.
+However, this would also mean that when just getting product information without getting reviews you
+have to get all of review data. The solution may be to keep the current User and Product schema with
+just the IDs and make copies of them that have the Review subdocument.  then the Product or User
+collection with just the id list has another field like UserWithFullReviews or
+ProductWithFullReviews that is a copy of User or Product respectively but with a subdocument list
+instead of id list. Then if you don't need the Reviews you can query the User or Product without
+them, but if you do need them, you can Query the UserWithFullReviews or ProductWithFullReviews with
+them.  This also means we can drop the id lists entirely as they will never be used). 
 
 api/landingProducts GET: retrieves the list of 3 items from the  Product collection to display on the landing page based on number of five star reviews
 
