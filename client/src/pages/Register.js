@@ -5,6 +5,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import authService from "../services/authService";
 import "./styles.css"
 
 const validate = (val, type) => {
@@ -62,7 +63,7 @@ const validUsername = (val) => {
         )
 }
 
-function Register () {
+function Register (props) {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -73,7 +74,9 @@ function Register () {
     const [errorEmail, setErrorEmail] = useState("");
     const [errorUsername, setErrorUsername] = useState("");
     const [errorPassword, setErrorPassword] = useState("");
-    const [completed, setCompleted] = useState(false)
+    const [completed, setCompleted] = useState(false);
+    const [message, setMessage] = useState("");
+    const [successful, setSuccessful] = useState(false);
 
     useEffect(() => {
         setCompleted(false)
@@ -93,35 +96,64 @@ function Register () {
         
         setFirstName(firstName);
         setErrorFirst(validate(firstName, "firstName"))
-      };
-      
-      const onChangeLastName = (e) => {
-        const lastName = e.target.value;
-        
-        setLastName(lastName);
-        setErrorLast(validate(lastName, "lastName"));
-      };
+    };
+    
+    const onChangeLastName = (e) => {
+    const lastName = e.target.value;
+    
+    setLastName(lastName);
+    setErrorLast(validate(lastName, "lastName"));
+    };
 
-      const onChangeEmail = (e) => {
-        const email = e.target.value;
-        
-        setEmail(email);        
-        setErrorEmail(validate(email, "email"));
-      };
+    const onChangeEmail = (e) => {
+    const email = e.target.value;
+    
+    setEmail(email);        
+    setErrorEmail(validate(email, "email"));
+    };
 
-      const onChangeUsername = (e) => {
-        const username = e.target.value;
-        
-        setUsername(username);
-        setErrorUsername(validate(username, "username"));
-      };
+    const onChangeUsername = (e) => {
+    const username = e.target.value;
+    
+    setUsername(username);
+    setErrorUsername(validate(username, "username"));
+    };
 
-      const onChangePassword = (e) => {
-        const password = e.target.value;
-        
-        setPassword(password);
-        setErrorPassword(validate(password, "password"));
-      };
+    const onChangePassword = (e) => {
+    const password = e.target.value;
+    
+    setPassword(password);
+    setErrorPassword(validate(password, "password"));
+    };
+
+    const handleRegistration = (e) => {
+        e.preventDefault()
+
+        setMessage("");
+        setSuccessful(false);
+
+        authService.register(firstName, lastName, email, username, password)
+            .then((response) => {
+                setMessage(response.data.message);
+                setSuccessful(true);
+
+                //Add login and redirect here
+                props.history.push("/");
+                window.location.reload();
+                },
+                (error) => {
+                    const resMessage =
+                        (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                        error.message ||
+                        error.toString();
+
+                    setMessage(resMessage);
+                    setSuccessful(false);
+                }
+            )
+    }
 
     return (
         <div>
@@ -175,11 +207,24 @@ function Register () {
                         onChange={onChangePassword}
                     />
                     {errorPassword}
+                    {message && (
+                        <div className={successful ? "alert alert-success" : "alert alert-danger"}
+                        role="alert"
+                        >
+                            {message}
+                        </div>
+                    )}
                     {!completed ? (
                         <button type="submit" className="submit-btn" id="submit-reg" disabled>Submit</button>
                     ) : 
                     (
-                        <button type="submit" className="submit-btn" id="submit-reg" >Submit</button>
+                        <button 
+                            type="submit" 
+                            className="submit-btn" 
+                            id="submit-reg"
+                            onClick={handleRegistration}
+                             >Submit
+                        </button>
                     )
                     }
                     <span className="register-link">Already have an account? <Link to={"/login"}>Log In</Link></span>
