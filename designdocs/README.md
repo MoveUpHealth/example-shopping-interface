@@ -250,7 +250,109 @@ https://stackoverflow.com/questions/66383516/add-mongoose-validation-for-phone-n
 The email regex pattern used comes from:\
 https://regexlib.com/Search.aspx?k=email&AspxAutoDetectCookieSupport=1
 
-### Testing
+# Backend JS Design
+
+The backend needs to send the information obtained from the react frontend to the database.  The Mongoose library is used to communicate with the database, while the Express library is used by the backend for the HTTP protocol commands such as GET, POST, and DELETE in order to communicate between the backend server and the frontend client.  The Express library is used to listen for and respond to these commands on the server. 
+
+## Express API
+
+The server listens for HTTP commands such as POST, GET, and DELETE to specific routes.  These commands are received with request data sent by the client Once these commands are received, it can perform a database action, log error messages, and populate a resource to be returned to the client.
+
+```
+api/auth/signup POST: adds a new User to the database
+
+api/auth/login GET: retrieves one User from the database
+
+api/product GET: retrieves one Product to be displayed by axios on its respective product page. This
+includes the Review item list associated with that Product. Then must retrieve each Review document
+from Database by querying all the ids in the list (TODO: look into refactoring DB design to use a
+subdocument list instead of ID list as is done with the shopping cart so this doesn't have to be
+done.  This would mean that slightly more time is required when adding a review as it needs to be
+added as a subdocument to both User and Product, but less time when retrieving one to be viewed.
+However, this would also mean that when just getting product information without getting reviews you
+have to get all of review data. The solution may be to keep the current User and Product schema with
+just the IDs and make copies of them that have the Review subdocument.  then the Product or User
+collection with just the id list has another field like UserWithFullReviews or
+ProductWithFullReviews that is a copy of User or Product respectively but with a subdocument list
+instead of id list. Then if you don't need the Reviews you can query the User or Product without
+them, but if you do need them, you can Query the UserWithFullReviews or ProductWithFullReviews with
+them.  This also means we can drop the id lists entirely as they will never be used). 
+
+api/landingProducts GET: retrieves the list of 3 items from the  Product collection to display on the landing page based on number of five star reviews
+
+api/similarProducts GET: retrieves a list of 3 items from the Product collection based on a category field
+ 
+
+```
+
+
+## Files
+The server/routes folder will contain the files for the Express HTTP protocol commands.  These files should be imported into server/server.js with a require.  The setup of the database tables helps to guide the file organization.
+
+```
+in server/routes:
+
+user.js - includes user as well as shopping cart collection GET and POST commands (since shopping cart is part of user)
+review.js - includes  review GET, POST, and DELETE commands
+product.js - includes product GET command
+
+
+```
+
+
+
+## Security
+
+### Password Hashing 
+
+Password hashing should be performed on the server side to prevent the server from storing plaintext passwords.  This way, if the passwords file on the server is stolen, it cannot be used to authenticate since the hash cannot be entered on the client side to authenticate.  The server side will hash it again and compare it to the hash, which will fail.  This is a standard security system that is very robust.  The security of this system depends on: attacker not being able to change server software, https, and a secure hash algorithm using an off-the-shelf security library.  
+
+The server requirement is why this is done on the server side and not the client side.  The client side is very easy for an attacker to change the code for since it is run on their own computer, but the attacker typically does not have the ability to change the code executing on the server computer systems. 
+
+### Displaying Password
+
+Displaying the password in a url is acceptable in the early stages of development for testing purposes, but this should not be removed once the signin implementation is completed. 
+
+# Frontend Design
+
+The frontend will use the React library to render the webpages.  It will use the Axios library to send HTTP requests such as GET, POST, and DELETE to the corresponding routes and commands set up on the backend.
+
+## Mockups
+
+The following page mockups were designed on Moqups.com:
+
+### The Landing Page
+![Landing Page](LandingPage.png "The Landing Page")
+
+### The Product Page
+![Product Page](ProductPage.png "The Product Page")
+
+### The Cart Page
+![Cart Page](CartPage.png "The Cart Page")
+
+The frontend needs to perform the following functions at minimum:
+* allow a user to sign up
+* allow a user to sign in
+* allow a user to see a product description
+* allow a user to write a review of a product
+* allow a user to add a product to the shopping cart
+
+The frontend needs the following pages:
+* landing page
+* product page
+* shopping cart page
+* sign up page
+* sign up success page
+* login page
+
+## Code Design
+
+The frontend will be designed using React, a popular Node.js library for frontends.
+
+There are many possible approaches in code design in Node.js, as it uses the JavaScript language.  We can stick to a more procedural approach or make it look a little more object oriented.  Either way, the important thing is that the design be consistent throughout. 
+
+
+# Testing
 
 Testing should use easily produced datasets (small or acquired from a public dataset).  This is in case testing uncovers a need to change the Database schema.  If the database schema is changed, it may invalidate the test set
 and require the production of another test set. 
