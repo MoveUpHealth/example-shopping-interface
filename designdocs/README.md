@@ -7,19 +7,45 @@ well as reduce the frontend design needs.
 
 ## Schemas
 
-The core of the schema describes the documents User, Product, and Review.  The ProductInCart schema is used in a subdocument array in the shopping cart:
+The core of the schema describes the documents User, Product,ReviewList, CartList, ProductInCart, and Review.  The user's shopping cart references the id of the CartList schema, which has a subdocument array with all the Products in Cart. Both the User and Product have a reviews field that references the id of the ReviewList schema, which has an array of all the reviews being retrieved in its reviews field.  Thus reviews are copied into two arrays, the one for the user and the one for the product.  Products are also copied into multiple ProductInCart entries. The reason to have multiple copies is to ensure fast retrieval times.
+
+If the purpose is to only retrieve user information, then returning all the review information as well may take extra time, so we will look for the user ID in the schema with only one id, the id of the entire list of reviews.  If we wish to look at the user's reviews, then we want to retrieve a full description of all the reviews at once, not an id list of the reviews.  The reason is if we retrieve an ID list, we will have to individually query the DB server for each ID from the Express server, whereas retrieving a single ID with a list of actual reviews (not review ids) takes constant time and should still be reasonably fast.  Sending multiple queries to the database over the network as would be necessary to retrieve many ids separately is time-intensive, which is what a NoSQL database like MongoDB tries to avoid with this kind of data duplication.  So the purpose of the CartList and ReviewList is to avoid this issue.
+
+Here is a diagram of the Schema:
 
 ![The documents User, Product, and Review with associated fields](basicDBPlan.png "The Basic Schema Plan")
 
 
 ```
 ProductInCart{ 
-	product_id: {
-		type: Number
+	product: {
+		type: Product
 	}
 	amt: {
 		type: Number		
 	}						
+}
+
+CartList {
+	cart_list_id: {
+		type: Number,
+		required: [true, 'review_list_id field is required'],
+		unique: true
+	}
+	products_in_cart: {
+		type: [ProductInCart]
+	}
+}
+
+ReviewList {
+	review_list_id: {
+		type: Number,
+		required: [true, 'review_list_id field is required'],
+		unique: true
+	}
+	reviews: {
+		type: [Review]
+	}
 }
 
 User
@@ -81,14 +107,14 @@ User
 		required: [true, 'password field is required']
 	}
 	shopping_cart: {
-		type: [ProductInCart]		
+		type: Number		
 	}
 	createdDate: {
         type: Date,
         default: Date.now,
     },
-	review_ids: {
-		type: [Number],
+	reviews: {
+		type: Number,
 	}
 	createdDate: {
 		type: Date,
@@ -120,8 +146,8 @@ Product
 		type: Decimal128,
 		required: [true, 'price field is required'],
 	}
-	review_ids: { 
-		type: [Number]
+	reviews: {
+		type: Number,
 	}
 	imagePath: {
 		type: String,
@@ -166,6 +192,7 @@ Review
 		pattern: ^/[1-5]/
 	}
 }
+
 
 ```
 
@@ -261,7 +288,7 @@ The server listens for HTTP commands such as POST, GET, and DELETE to specific r
 ```
 api/auth/signup POST: adds a new User to the database
 
-api/auth/login GET: retrieves one User from the database
+api/auth/login POST: retrieves one User from the database
 
 api/product GET: retrieves one Product to be displayed by axios on its respective product page. This
 includes the Review item list associated with that Product. Then must retrieve each Review document
