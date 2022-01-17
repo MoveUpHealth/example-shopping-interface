@@ -4,6 +4,11 @@ Date: August 30, 2021
 
 Description: Stylesheet for all pages
 */
+a {
+    text-decoration: none;
+    color: inherit;
+    font-family: inherit;
+}
 
 .login {
     padding: 2% 2%;
@@ -30,3 +35,159 @@ label, input, button {
 .submit-btn {
     width: 95%;
 }
+
+.body {
+    width: 100%;
+}
+
+.main {
+    background-color: white;
+    box-shadow: 6px 6px 5px #aaaaaa;
+    width: 97%;
+    margin: 0 auto;
+
+}
+
+.topRow, .row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.topRow {
+    height: 360px;
+    overflow: hidden;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    width: 70%;
+}
+
+.imgContainer {
+    position: relative;
+}
+
+.overlay {
+    width: 100%;
+    text-align: center;
+    top: 48%;
+    z-index: 5;
+    position: absolute;
+}
+
+.announcement {
+    display: inline-block;
+    font-size: 300%;
+    background-color: rgba(250, 248, 231, 0.664);
+    margin: 0 auto;
+    padding: 1%;
+    border-radius: 3px;
+}
+
+.whiteBG {
+    background-color: rgba(250, 248, 231, 0.664);
+}
+
+.slides {
+    margin: 20px auto 20px auto;
+    width: 97%;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.slide {
+    display: none;
+    width: 32.33%;
+    position: relative;
+    transition: .5s ease-in-out;
+}
+
+.inView {
+    display: block;
+}
+
+.bestImg {
+    height: 400px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.productImg {
+   margin-top: -25%;
+}
+
+.productInfo {
+    width: 96%;
+    position: absolute;
+    bottom: 0;
+    padding: 1% 2%;
+    background-color: rgba(169, 169, 169, 0.851);
+    opacity: 0;
+    transition: .5s ease;
+}
+
+.slide:hover .productInfo {
+    opacity: 1;
+}
+
+.productInfo h3 {
+    width: 50%;
+    color: white;
+    font-weight: 400;
+    display: inline-block;
+    margin: 1% 0;
+    z-index: 10;
+}
+
+.productName {
+    text-align: left;
+}
+
+.productPrice {
+    text-align: right;
+}
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    width: auto;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+}
+
+.next {
+    right: 1.5%;
+    border-radius: 3px 0 0 3px;
+}
+  
+
+.prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
+}
+
+.sectionTitle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    font-size: 200%;
+    margin: 0;
+}
+
+
+
+
+
+
+
+
