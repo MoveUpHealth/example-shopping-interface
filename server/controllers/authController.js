@@ -55,6 +55,7 @@ exports.signin = (req, res) => {
                 acessToken: null,
                 message: "Invalid password."
             });
+            return;
         }
 
         const token = jwt.sign(
