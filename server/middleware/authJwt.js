@@ -1,7 +1,7 @@
 //  Author: Jessica Tax;
 //  Date: January 14, 2022
 
-//  Description: The middleware to generate the webtoken
+//  Description: The middleware to verify the webtoken
 
 const jwt = require('jsonwebtoken');
 const config = require("../config/auth.config");
