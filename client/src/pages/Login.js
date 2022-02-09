@@ -3,11 +3,82 @@
 
 //  Description: Page for user login
 
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
+import authService from "../services/authService";
 import "./styles.css"
 
-function Login () {
+const required = val => {
+    if(!val){
+        return (
+            <div>
+                This field is required.
+            </div>
+        )
+    }
+    return true
+}
+
+function Login (props) {
+    const [completed, setCompleted] = useState(false);
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [errorUsername, setErrorUsername] = useState("");
+    const [errorPassword, setErrorPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
+
+    useEffect(() => {
+        setCompleted(false)
+
+        if( 
+            errorUsername === true &&
+            errorPassword === true){
+            setCompleted(true)
+        }
+    }, [errorUsername, errorPassword]
+    )
+
+    const onChangeUsername = (e) => {
+    const username = e.target.value;
+    
+    setUsername(username);
+    setErrorUsername(required(username));
+    };
+
+    const onChangePassword = (e) => {
+    const password = e.target.value;
+    
+    setPassword(password);
+    setErrorPassword(required(password));
+    };
+
+    const handleLogin = (e) => {
+        e.preventDefault();
+
+        setMessage("");
+        setLoading(true);
+
+        authService.login(username, password).then(
+            () => {
+                //Redirect here
+                props.history.push("/");
+                window.location.reload();
+            },
+            (error) => {
+                const resMessage =
+                  (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                  error.message ||
+                  error.toString();
+                
+                setLoading(false);
+                setMessage(resMessage);
+            }
+        )
+    }
+
     return (
         <div className="login">
             <form className="login-form">
@@ -15,13 +86,44 @@ function Login () {
                     <legend>
                         Login
                     </legend>
-                    <label className="login-label">E-mail/Username:</label>
-                    <input type="email" />
-
+                    <label className="login-label">Username:</label>
+                    <input 
+                        type="text"
+                        name="username"
+                        value={username}
+                        onChange={onChangeUsername}
+                    />
+                    {errorUsername}
+                    
                     <label className="login-label">Password:</label>
-                    <input type="password"/>
+                    <input 
+                        type="password"
+                        name="password"
+                        value={password}
+                        onChange={onChangePassword}
+                    />
+                    {errorPassword}
+                    {message && (
+                        <div className={loading ? "alert alert-success" : "alert alert-danger"}
+                        role="alert"
+                        >
+                            {message}
+                        </div>
+                    )}
 
-                    <input type="submit" className="submit-btn" />
+                    {!completed ? (
+                        <button type="submit" className="submit-btn" id="submit-login" disabled>Submit</button>
+                    ) : 
+                    (
+                        <button 
+                            type="submit" 
+                            className="submit-btn" 
+                            id="submit-reg"
+                            onClick={handleLogin}
+                             >Login
+                        </button>
+                    )
+                    }
                     <span className="register-link">Don't have an account? <Link to={"/register"}>Sign up</Link></span>
                 </fieldset>
             </form>
