@@ -4,6 +4,7 @@
 //  Description: Defines the methods for specified calls to the server
 
 const controller = require("../controllers/authController");
+const verifyIsUnique = require("../middleware/verifyIsUnique")
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -14,7 +15,7 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/api/auth/signup", controller.signup);
+  app.post("/api/auth/signup", [ verifyIsUnique.checkIsUniqueUser ], controller.signup);
 
   app.post("/api/auth/signin", controller.signin);
 };
