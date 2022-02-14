@@ -95,6 +95,9 @@ User
 			state: {
 				type: String
 			}
+			tax: {
+				type: Decimal128
+			}
 		}
 	}
 	phone: {
@@ -140,10 +143,6 @@ Product
 		required: [true, 'description field is required'],
 	}
 	price: {
-		type: Decimal128,
-		required: [true, 'price field is required'],
-	}
-	tax: {
 		type: Decimal128,
 		required: [true, 'price field is required'],
 	}
