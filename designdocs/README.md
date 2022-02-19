@@ -1,7 +1,6 @@
 # Shopping Interface Design Decisions
 
-This shopping interface will be designed for US users only.  This will limit the possibilities we need to validate in the schema for address and phone number, as
-well as reduce the frontend design needs.
+This shopping interface will be designed for US users only.  This will limit the possibilities we need to validate in the schema for address and phone number, as well as reduce the frontend design needs.
 
 # Shopping DB Collections
 
@@ -53,13 +52,13 @@ User
 	email: {
 		type: String,
 		required: [true, 'email field is required'],
-		unique: true,
+		unique: [true, 'that email address already exists]',
 		pattern: ^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$
 	}
 	username: {
 		type: String,
 		required: [true, 'username is required'],
-		unique: true,
+		unique: [true,'that username already exists']
 		minLength: 5,
 		maxLength: 35,
 	}
@@ -96,6 +95,9 @@ User
 			state: {
 				type: String
 			}
+			tax: {
+				type: Decimal128
+			}
 		}
 	}
 	phone: {
@@ -107,7 +109,8 @@ User
 		required: [true, 'password field is required']
 	}
 	shopping_cart: {
-		type: Number		
+		type: Number	
+		unique: [true,'another user's cart was already assigned this id']	
 	}
 	createdDate: {
         type: Date,
@@ -115,6 +118,7 @@ User
     },
 	reviews: {
 		type: Number,
+		unique: [true,'another user's review list was already assigned this id']	
 	}
 	createdDate: {
 		type: Date,
@@ -128,7 +132,7 @@ Product
 	product_id: {
 		type: Number,
 		required: [true, 'product_id field is required'],
-		unique: true,
+		unique: [true, 'another product was already assigned this id']
 	}
 	name: {
 		type: String,
@@ -139,10 +143,6 @@ Product
 		required: [true, 'description field is required'],
 	}
 	price: {
-		type: Decimal128,
-		required: [true, 'price field is required'],
-	}
-	tax: {
 		type: Decimal128,
 		required: [true, 'price field is required'],
 	}
@@ -164,19 +164,17 @@ Review
 	review_id: {
 		type: Number,
 		required: [true, 'email field is required'],
-		unique: true,
+		unique: [true, 'another review was already assigned this id'],
 	}
 	username {
 		type: String,
 		required: [true, 'username is required'],
-		unique: true,
 		minLength: 5,
 		maxLength: 35,
 	}
 	product_id {
 		type: Number,
 		required: [true, 'product_id field is required'],
-		unique: true,
 	}
 	title: {
 		type: String,
@@ -196,6 +194,12 @@ Review
 
 ```
 
+### Document ID's
+
+In the diagram and schema above, any id for a document is listed as unique in any document set that it is a key for.  If it is a foreign key it may not necessarily need to be unique, however.  For example, the username in User must be unique, but the username in the Review documents would not expected to be unique, as a given user should be able to write more than one review.  However, each ReviewList number in the User documents (the reviews field) must be unique since that particular list of reviews belongs to that user and that user alone.  
+
+In general, to determine whether a field is unique in a given document type, consideration was given to whether it has a one-to-one relationship to the document type in question.
+
 ### Justification for Data Validation
 
 Data validation takes time and thus should be justified in any NoSQL Database.  There are a number of reasons to validate fields in an application like a shopping interface that will require storing large amounts of data.  We
@@ -207,12 +211,12 @@ use a schema designed to validate all necessary fields.
 
 The justification of using a NoSQL Database is its ability for its more flexible features to increase speed of data input and retrieval over SQL Databases.  However, unnecessary data duplication can negatively impact speed 
 by increasing document size, which increases the time taken to retrieve the corresponding document.  It can also increase the possibility of introducing errors.  To this end, this schema balances these two needs by using a 
-list of review_ids nested inside each User and Product document. The id list speeds the retrieval of the data while preventing unnecessary data in the Review Collection, such as the body of the review, from being duplicated 
+reviews number nested inside each User and Product document. This number is an id that leads to a separate list that contains the full reviews.  This speeds the retrieval of the review data while preventing unnecessary data in the Review Collection, such as the body of the review, from being duplicated 
 in the User and Product collections.
 
 ### ID Retrieval Patterns
 
-Since we will be retrieving the reviews only after looking at a customer or product id, we technically do not need to store those in the review itself.  However, when retrireving a Review document, we will need to retrieve 
+Since we will be retrieving the reviews only after looking at a customer or product id, we technically do not need to store those in the review itself.  However, when retrieving a Review document, we will need to retrieve 
 both the review information and the information of the other document type.  For example, if we retrieve a review for a customer, we will also need to retrieve its corresponding product, and if we retrieve a review for a product, 
 we will also need to retrieve information about its corresponding customer.  To resolve this without needing the review items themselves to have the extra ids, we could store the corresponding review\_id's and product\_id's together 
 in the User document, and the corresponding review\_id's and usernames in the Product document.  However, since doing this could nearly double the size of Users and Product documents with many associated reviews with little to 
@@ -221,11 +225,11 @@ alternative design choice.
 
 ### User Schema Notes
 
-The phone number should be a string so that we can specifiy a reqex.  We will store it with the dashes, unlike how we would if an SQL database were being used, as this saves a few formatting operations at retrieval time 
+The phone number should be a string so that we can specify a reqex.  We will store it with the dashes, unlike how we would if an SQL database were being used, as this saves a few formatting operations at retrieval time 
 at the expense of increasing space requirements, which is keeping in the philosophy of using a NoSQL database. The frontend should automatically insert the dashes for the user in the interface and when submitting to the 
 backend so they don't have to enter them.
 
-The image path stores the path to the image on the server, which will be added to the img tags in the html coded in the React frontend.
+The image path stores the path to the image on the server, which will be added to the img tags in the JSX (html-like language) coded in the React frontend.
 
 **security considerations**\
 The username is a field added entirely for display convenience and security reasons for the end-user.  Some reasons users may want a username:
@@ -244,7 +248,7 @@ The following information is considered sensitive for the user and we should avo
 * address
 * phone
 
-The most sensitive information here is the password, as obtaining it allows a malicious party to acces their account and impersonate the user, as well as obtain sensitive information regarding the user.
+The most sensitive information here is the password, as obtaining it allows a malicious party to access their account and impersonate the user, as well as obtain sensitive information regarding the user.
 However, the other information is still sensitive and should not be displayed publicly.  We should do tests to check whether malicious attacks can expose any of this information.
 
 The shopping cart inside the User uses an array of the subdocument declared earlier called ProductInCart.  Product in cart has a product_id corresponding to the name of a product, and an amt corresponding to the
@@ -285,33 +289,56 @@ The backend needs to send the information obtained from the react frontend to th
 
 The server listens for HTTP commands such as POST, GET, and DELETE to specific routes.  These commands are received with request data sent by the client Once these commands are received, it can perform a database action, log error messages, and populate a resource to be returned to the client.
 
+The primary difference between GET and POST is that GET sends form values via the URL whereas POST sends them without displaying them in the URL.
+
 ```
 api/auth/signup POST: adds a new User to the database
 
 api/auth/login POST: retrieves one User from the database
 
-api/product GET: retrieves one Product to be displayed by axios on its respective product page. This
-includes the Review item list associated with that Product. Then must retrieve each Review document
-from Database by querying all the ids in the list (TODO: look into refactoring DB design to use a
-subdocument list instead of ID list as is done with the shopping cart so this doesn't have to be
-done.  This would mean that slightly more time is required when adding a review as it needs to be
-added as a subdocument to both User and Product, but less time when retrieving one to be viewed.
-However, this would also mean that when just getting product information without getting reviews you
-have to get all of review data. The solution may be to keep the current User and Product schema with
-just the IDs and make copies of them that have the Review subdocument.  then the Product or User
-collection with just the id list has another field like UserWithFullReviews or
-ProductWithFullReviews that is a copy of User or Product respectively but with a subdocument list
-instead of id list. Then if you don't need the Reviews you can query the User or Product without
-them, but if you do need them, you can Query the UserWithFullReviews or ProductWithFullReviews with
-them.  This also means we can drop the id lists entirely as they will never be used). 
+api/product GET: retrieves one Product to be displayed by axios on its
+respective product page. This includes the Review item list associated with
+that Product. 
 
-api/landingProducts GET: retrieves the list of 3 items from the  Product collection to display on the landing page based on number of five star reviews
+api/landingProducts POST: On the landing page, retrieves the list of 6 items
+from the Product collection to display on the landing page based on number of
+five star reviews
 
-api/similarProducts GET: retrieves a list of 3 items from the Product collection based on a category field
+api/similarProducts POST: On a product page, retrieves a list of 3 items from the Product collection based on a category field
+
+api/review POST: Clicking on the Add a Review on the Product page link opens a
+dialog that the user can write a review in and adds a submit button so the
+user can submit a review to the database.
+
+api/editReview POST: Allows editing the review by clicking the edit button
+added to a signed in user's review on the Product page.
+
+api/review DELETE: Clicking on the delete button added to a signed in user's
+review on a Product page allows them to delete it from the database.
+
+api/cart POST: Adds a product and product amount to the ProductInCart when
+clicking the Add to Cart button on the Product page (note: product page needs
+an amount text box added to it to specify the quantity of items being bought).
+
+api/editCart POST: Allows editing the product amount to the ProductInCart when
+changing it on the Cart page.
+
+api/cart DELETE: Removes an item from the cart (note: need to add a delete
+button to each item on the shopping cart page).
  
-
 ```
 
+## Editing vs Adding
+I have chosen to make editing a review or product in cart separate from creating them even though I could make them use the same api because then when adding a review or product in a cart it should not be necessary to check for the existence of that review or product in cart beforehand, so this saves time by avoiding that check before adding a new product.  The product already existing is assumed to be an error.  The edit api's, on the other hand, will always check for the product and edit it rather than creating it.  The product not already existing is assumed to be an error, as you shouldn't have the option to edit a nonexistent review or a product that is not already in your cart. 
+
+## Adding the Products to the Database
+In a production environment, there would also be an interface for employees to add products and perhaps to assist with user accounts.  Creating an interface that does this is outside the scope for this project, but we should devise an automated way to populate the products database with a sufficient number of products to thoroughly test the shopping database.
+
+One way we can do this be setting up an array of products on the server side that is added to the database as soon as it starts listening.  A comment should mark this as test code which will eventually be moved out to a test that autopopulates the server with a list of products.  
+
+### Security Considerations 
+
+GET should not be used to pass security sensitive values like passwords as it sends the information via the browser URL.  Use POST instead, as shown in the Express API info for api/auth/login above.
 
 ## Files
 The server/routes folder will contain the files for the Express HTTP protocol commands.  These files should be imported into server/server.js with a require.  The setup of the database tables helps to guide the file organization.
@@ -323,10 +350,7 @@ user.js - includes user as well as shopping cart collection GET and POST command
 review.js - includes  review GET, POST, and DELETE commands
 product.js - includes product GET command
 
-
 ```
-
-
 
 ## Security
 
@@ -350,6 +374,8 @@ The following page mockups were designed on Moqups.com:
 
 ### The Landing Page
 ![Landing Page](LandingPage.png "The Landing Page")
+
+After the user signs in, they will be directed back to the landing page, and their username will appear in the menu beside the user icon instead of 'Sign In/Track Order'.  The username should stay be the icon regardless of what page the user navigates to until they sign out.
 
 ### The Product Page
 ![Product Page](ProductPage.png "The Product Page")
@@ -408,8 +434,28 @@ For backend tests, the [Mocha](https://github.com/mochajs/mocha) test framework 
 2. Try to login with an invalid email (with @ symbol) and password - check for 'that username/password combination does not exist'
 3. Try to sign up with invalid email (no @ symbol) - check for @ error message
 4. Try to sign up with valid email-check for confirmation
-5. Try to login with a valid username and password - check for the user page title
+5. Try to login with a valid username and password - check for the username in menu
 6. At the sign-up page, sign a user up with valid info.  Check details of user page to make sure that all details match with details entered in at signup.
+7. Create a valid user with all valid required information only
+8. Create a valid user including all valid optional information
+9. Create an invalid user missing a username
+10. Create an invalid missing an email
+11. Create an invalid user missing a first name
+12. Create an invalid user missing a last name
+13. Create an invalid user missing a password
+14. Create a user with various invalid emails that use incorrect format
+15. Create a user with an invalid username less than 5 characters
+16. Create a user with an invalid username greater than 35 characters
+17. Create a user with an invalid first name less than 2 characters
+18. Create a user with an invalid first name greater than 40 characters
+19. Create a user with an invalid last name less than 2 characters
+20. Create a user with an invalid first name greater than 40 characters
+21. Create a user with an invalid company name greater than 100 characters
+22. Create a user with an invalid street address of less than 5 characters
+23. Create a user with an invalid street address of greater than 150 characters
+24. Create a user with an invalid city name of greater than 50 characters
+25. Create a user with an invalid phone number 
+
 
 **Manual Testing**\
 Manual testing will be used in the initial phases before automated tests are set up, and to supplement the automated tests for situations that are difficult to test in an automated way.  Testing the backend manually 
@@ -417,23 +463,12 @@ can be done with [Postman](https://www.postman.com/) or [Insomnia](https://insom
 
 Messages should also be tested for security concerns to check that they do not leak sensitive information, either from users or about the website or company as a whole.
 
-**Insomnia or Postman Tests**
-1. Create a valid user with all valid required information
-2. Create a valid user including all valid optional information
-3. Create an invalid user missing a username
-4. Create an invalid missing an email
-5. Create an invalid user missing a first name
-6. Create an invalid user missing a last name
-7. Create an invalid user missing a password
-8. Create a user with various invalid emails that use incorrect format
-9. Create a user with an invalid username less than 5 characters
-10. Create a user with an invalid username greater than 35 characters
-11. Create a user with an invalid first name less than 2 characters
-12. Create a user with an invalid first name greater than 40 characters
-13. Create a user with an invalid last name less than 2 characters
-14. Create a user with an invalid first name greater than 40 characters
-15. Create a user with an invalid company name greater than 100 characters
-16. Create a user with an invalid street address of less than 5 characters
-17. Create a user with an invalid street address of greater than 150 characters
-18. Create a user with an invalid city name of greater than 50 characters
-19. Create a user with an invalid phone number 
+**Insomnia/Postman and/or React Interface Tests**
+1. At the sign-up page, sign a user up with valid info.  Check details of user page to make sure that all details match with details entered in at signup.
+2. Sign up a user with incorrect info.  Make sure useful error message returned.
+3. Login with correct username and password
+4. Login with incorrect username
+5. Login with correct username or incorrect password 
+
+
+
