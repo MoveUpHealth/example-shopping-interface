@@ -8,7 +8,7 @@ const productController = require("../../controllers/productController");
 
 router.route("/")
     .get(productController.findAll)
-    .create(productController.create)
+    .post(productController.create)
 
 router.route("/:id")
     .get(productController.findById)
