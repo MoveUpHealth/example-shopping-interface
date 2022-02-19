@@ -9,6 +9,7 @@ File Description: Main file for the server.
 const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
+const routes = require("./routes")
 require('dotenv').config();
 
 const app = express();
@@ -29,6 +30,8 @@ connection.once('open', () => {
 //added by JT on August 30th 2021
 //route for signup
 require("./routes/authRoutes")(app);
+//added by JT on February 9th, 2022
+app.use(routes);
 
 //listen on the server
 app.listen(port, () => {
