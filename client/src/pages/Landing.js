@@ -12,7 +12,8 @@ import slide3 from "../images/earbuds.jpg"
 import slide4 from "../images/plates.jpg"
 import slide5 from "../images/sunglasses.jpg"
 import slide6 from "../images/tablet.jpg"
-import slide7 from "../images/pot.jpg"
+import slide7 from "../images/greypurse.jpg"
+import slide8 from "../images/pot.jpg"
 import "./styles.css";
 
  
@@ -107,7 +108,7 @@ function Landing (props) {
                         productList.indexOf(slide) === slideIndex || 
                         productList.indexOf(slide) === (slideIndex+1)) === true) ? "slide inView" : "slide"}>
                         <div className="bestImg">
-                            <img className="productImg" src={require(`../images/${slide.img}`).default} alt={"Product" + slide.product_id} />
+                            <img className="productImg" key={slide.product_id} src={require(`../images/${slide.img}`).default} alt={"Product" + slide.product_id} />
                         </div>
                         <div className="productInfo">
                             <h3 className="productName">

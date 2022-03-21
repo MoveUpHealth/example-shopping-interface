@@ -5,4 +5,5 @@
 
 module.exports = {
     authJwt: require("./authJwt"),
+    verifyIsUnique: require("./verifyIsUnique")
 }
