@@ -75,7 +75,7 @@ const data = [{
             "description": "This tablet combines the power of a desktop computer with the portability of a phone; now you really can have the best of both worlds!",
             "price": "259.99",
             "reviews": 7,
-            "iamgePath": "tablet.jpg",
+            "imagePath": "tablet.jpg",
             "thumbnailPath": "thumb_tablet.jpg"
         },
         {
@@ -84,7 +84,7 @@ const data = [{
             "description": "The color may be neutral, but the statement is anything but. This purse is a must have!",
             "price": "159.99",
             "reviews": 3,
-            "iamgePath": "greypurse.jpg",
+            "imagePath": "greypurse.jpg",
             "thumbnailPath": "thumb_greypurse.jpg"
         },
         {
@@ -93,7 +93,7 @@ const data = [{
             "description": "Add a touch of sophistication to any room with this modern pot.",
             "price": "59.99",
             "reviews": 4,
-            "iamgePath": "pot.jpg",
+            "imagePath": "pot.jpg",
             "thumbnailPath": "thumb_pot.jpg"
         },
 
