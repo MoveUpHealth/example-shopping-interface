@@ -17,7 +17,6 @@ import Cart from './pages/Cart';
 
 function App() {
   return (
-    <Router>
       <div>
         <Header />
         <Routes>
@@ -31,7 +30,6 @@ function App() {
           <Route exact path="/department" element={Department()} />
         </Routes>
       </div>
-    </Router>
   );
 }
 
