@@ -88,18 +88,20 @@ function Login (props) {
                     <legend>
                         Login
                     </legend>
-                    <label className="login-label">Username:</label>
+                    <label className="login-label" htmlFor="username">Username:</label>
                     <input 
                         type="text"
+                        id="username"
                         name="username"
                         value={username}
                         onChange={onChangeUsername}
                     />
                     {errorUsername}
                     
-                    <label className="login-label">Password:</label>
+                    <label className="login-label" htmlFor="password">Password:</label>
                     <input 
                         type="password"
+			id="password"
                         name="password"
                         value={password}
                         onChange={onChangePassword}
@@ -114,13 +116,14 @@ function Login (props) {
                     )}
 
                     {!completed ? (
-                        <button type="submit" className="submit-btn" id="submit-login" disabled>Submit</button>
+                        <button type="submit" className="submit-btn" id="submit-login" data-testid="submit-disabled" disabled>Submit</button>
                     ) : 
                     (
                         <button 
                             type="submit" 
                             className="submit-btn" 
                             id="submit-reg"
+			    data-testid="submit-reg"
                             onClick={handleLogin}
                              >Login
                         </button>
