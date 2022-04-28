@@ -1,24 +1,39 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+/*
+App test suite
+use 'npm test a' to run all test suites
+*/
+import { MemoryRouter } from "react-router-dom";
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import App from './App';
 
-
 test('Check for page logo on landing page', () => {
-    render(<App />);
+    render(
+           <MemoryRouter>
+             <App />
+           </MemoryRouter>
+           );
 
     const image = screen.getByAltText('Shop Logo');
 
     expect(image).toHaveAttribute('src', 'logo.png')
 });
 
+
 test('Click the Sign In/Track Order link and check for correct page title', () => {
-    render(<App />);
+    render(
+           <MemoryRouter>
+             <App />
+           </MemoryRouter>
+           );
 
     const link = screen.getByText('Sign In/Track Order');
 
+    //waitFor(async () => await fireEvent.click(link));
     fireEvent.click(link);
 
     //change http://localhost to actual url when testing on web
-    expect(window.location.href).toBe("http://localhost/login");
+    //expect(window.location.href).toBe("http://localhost/login");
+    waitFor( async () => await expect(window.location.href).toBe("http://localhost/login"));
 
     render(<legend></legend>);
 
@@ -26,8 +41,13 @@ test('Click the Sign In/Track Order link and check for correct page title', () =
     expect(txt.innerHTML).toEqual('Login');
 });
 
+
 test('Click the Favorites link and check for the correct page title', () => {
-    render(<App />);
+    render(
+           <MemoryRouter>
+             <App />
+           </MemoryRouter>
+           );
 
     //this link renders the heart emoji \f004
     const link = screen.getByLabelText('Favorites');
@@ -35,7 +55,7 @@ test('Click the Favorites link and check for the correct page title', () => {
     fireEvent.click(link);
 
     //change http://localhost to actual url when testing on web
-    expect(window.location.href).toBe("http://localhost/favorites");
+    waitFor( async () => await expect(window.location.href).toBe("http://localhost/favorites"));
 
     //this will make current page pass
     //const txt = screen.getByText('This is the favorites page!');
@@ -46,8 +66,13 @@ test('Click the Favorites link and check for the correct page title', () => {
 
 });
 
+
 test('Click the Cart link and check for correct page title', () => {
-    render(<App />);
+    render(
+           <MemoryRouter>
+             <App />
+           </MemoryRouter>
+    );
 
     //this link renders the cart emoji \f07a
     const link = screen.getByLabelText('Shopping Cart');
@@ -55,7 +80,7 @@ test('Click the Cart link and check for correct page title', () => {
     fireEvent.click(link);
 
     //change http://localhost to actual url when testing on web
-    expect(window.location.href).toBe("http://localhost/cart");
+    waitFor( async () => await expect(window.location.href).toBe("http://localhost/cart"));
 
     //change this to the correct page title when added
     //const txt = screen.getByText('This is the cart page!');
@@ -64,3 +89,5 @@ test('Click the Cart link and check for correct page title', () => {
     const txt = screen.getByText('Shopping Cart');
     expect(txt.innerHTML).toEqual('Shopping Cart');
 });
+
+
