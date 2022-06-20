@@ -4,7 +4,7 @@
 //  Description: Page for user registration
 
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import authService from "../services/authService";
 import "./styles.css"
 
@@ -77,6 +77,7 @@ function Register (props) {
     const [completed, setCompleted] = useState(false);
     const [message, setMessage] = useState("");
     const [successful, setSuccessful] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setCompleted(false)
@@ -138,7 +139,7 @@ function Register (props) {
                 setSuccessful(true);
 
                 //Add login and redirect here
-                props.history.push("/");
+                navigate('/');
                 window.location.reload();
                 },
                 (error) => {

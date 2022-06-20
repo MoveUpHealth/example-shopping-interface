@@ -4,6 +4,7 @@
 //  Description: Landing page
 
 import React, { useState, useEffect, useRef } from "react";
+
 import mainVid from "../images/shopping.mp4";
 import timeToShop from "../images/timetoshop.jpg";
 import slide1 from "../images/purse.jpg"
@@ -19,8 +20,9 @@ import "./styles.css";
  
 
 function Landing (props) {
-
+    
     const [slideIndex, setslideIndex] = useState(1)
+    /*
     const productList = [
         {
             product_id: 1,
@@ -59,6 +61,47 @@ function Landing (props) {
             img: "tablet.jpg"
         },
     ]
+    */
+
+    const productList = [
+        {
+            product_id: 1,
+            product: "Red Purse",
+            price: "59.99",
+            img: slide1
+        },
+        {
+            product_id: 2,
+            product: "Yellow Chair",
+            price: "129.99",
+            img: slide2
+        },
+        {
+            product_id: 3,
+            product: "Earbuds",
+            price: "99.99",
+            img: slide3
+        },
+        {
+            product_id: 4,
+            product: "Blue Plates",
+            price: "79.99",
+            img: slide4
+        },
+        {
+            product_id: 5,
+            product: "Sunglasses",
+            price: "49.99",
+            img: slide5
+        },
+        {
+            product_id: 6,
+            product: "Tablet",
+            price: "259.99",
+            img: slide6
+        },
+    ]
+
 
     const incSlides = () => {
         if ((slideIndex + 3) > productList.length) {
@@ -76,6 +119,35 @@ function Landing (props) {
         } 
     }
 
+   //manages the JSX element that displays each slide for the variable slideItems below
+   const SlideItem = (props) => {
+       const slide = props.slide
+                    return (
+                    <div className={((productList.indexOf(slide) === (slideIndex-1) || 
+                        productList.indexOf(slide) === slideIndex || 
+                        productList.indexOf(slide) === (slideIndex+1)) === true) ? "slide inView" : "slide"} >
+                        <div className="bestImg">
+                            <img className="productImg"  src={slide.img} alt={"Product" + slide.product_id} />
+                        </div>
+                        
+                        <div className="productInfo" >
+                            <h3 className="productName">
+                                {slide.product}
+                            </h3>
+                            <h3 className="productPrice">
+                                {slide.price}
+                            </h3>
+                        </div>
+                        
+                    </div>
+                    );
+   }
+
+   //uses function SlideItem above as JSX element like shown here: https://reactjs.org/docs/lists-and-keys.html#keys
+   const slideItems = productList.map(slide =>   
+      <SlideItem key={slide.product_id.toString()} slide={slide} />
+   );
+    
     return (
         <div className="body">
             <div className="main">
@@ -101,30 +173,13 @@ function Landing (props) {
                     </h2>
                 </div>
             </div>
+            
             <div className="row slides">
-                {productList.map((slide) => {  
-                    return (
-                    <div className={((productList.indexOf(slide) === (slideIndex-1) || 
-                        productList.indexOf(slide) === slideIndex || 
-                        productList.indexOf(slide) === (slideIndex+1)) === true) ? "slide inView" : "slide"}>
-                        <div className="bestImg">
-                            <img className="productImg" key={slide.product_id} src={require(`../images/${slide.img}`).default} alt={"Product" + slide.product_id} />
-                        </div>
-                        <div className="productInfo">
-                            <h3 className="productName">
-                                {slide.product}
-                            </h3>
-                            <h3 className="productPrice">
-                                {slide.price}
-                            </h3>
-                        </div>
-                    </div>
-                    )
-                    }
-                )}
+                {slideItems}
                 <a className="prev" onClick={decSlides}>&#10094;</a>
                 <a className="next" onClick={incSlides}>&#10095;</a>
             </div>
+            
             <div className="sectionTitle">
                 <h2 className="title">
                     Best Sellers
@@ -133,6 +188,7 @@ function Landing (props) {
                     Get these items while you still can!
                 </h2>
             </div>
+            
         </div>
     )
 }

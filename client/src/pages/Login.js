@@ -4,7 +4,7 @@
 //  Description: Page for user login
 
 import React, {useState, useEffect} from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import authService from "../services/authService";
 import "./styles.css"
 
@@ -27,6 +27,8 @@ function Login (props) {
     const [errorPassword, setErrorPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         setCompleted(false)
@@ -62,7 +64,7 @@ function Login (props) {
         authService.login(username, password).then(
             () => {
                 //Redirect here
-                props.history.push("/");
+                navigate("/");
                 window.location.reload();
             },
             (error) => {

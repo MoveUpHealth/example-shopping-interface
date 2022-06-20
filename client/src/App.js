@@ -4,7 +4,7 @@
 //  Description: Compiles pages with header, footer, and page routes
 
 import React from 'react';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header"
 import Landing from "./pages/Landing"
 import Login from "./pages/Login"
@@ -17,19 +17,19 @@ import Cart from './pages/Cart';
 
 function App() {
   return (
-    <Router>
       <div>
         <Header />
-        <Route exact path="/" component={Landing} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/account" component={Account} />
-        <Route exact path="/product" component={Product} />
-        <Route exact path="/favorites" component={Favorites} />
-        <Route exact path="/cart" component={Cart} />
-        <Route exact path="/department" component={Department} />
+        <Routes>
+          <Route exact path="/" element={Landing()} />
+          <Route exact path="/login" element={Login()} />
+          <Route exact path="/register" element={Register()} />
+          <Route exact path="/account" element={Account()} />
+          <Route exact path="/product" element={Product()} />
+          <Route exact path="/favorites" element={Favorites()} />
+          <Route exact path="/cart" element={Cart()} />
+          <Route exact path="/department" element={Department()} />
+        </Routes>
       </div>
-    </Router>
   );
 }
 
