@@ -40,9 +40,9 @@ test('Click the Sign In/Track Order link and login with incorrect password', () 
         
 	console.log("txt: " + txt.innerHTML);
         //reactTest
-        //expect(txt.innerHTML).toBe("Invalid pasword.");
+        expect(txt.innerHTML).toBe("Invalid pasword.");
         //jest-dom
-        expect(txt.innerHTML).toHaveTextContent("Invalid password.");
+        //expect(txt.innerHTML).toHaveTextContent("Inval password.");
 
     }, 200);
 
